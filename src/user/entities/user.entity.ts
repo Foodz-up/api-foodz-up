@@ -38,6 +38,9 @@ export class User {
   password: string;
 
   @Column({ nullable: true })
+  resetToken: string;
+
+  @Column({ nullable: true })
   refreshToken: string;
 
   @Column({ nullable: true })

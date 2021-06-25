@@ -12,11 +12,13 @@ import { comparePasswords } from '../helpers/utils';
 import { from } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ChangePasswordUserDTO } from './dto/user.changePassword';
+import { MailService } from 'src/mail/mail.service';
 const argon = require('argon2');
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    private mailService: MailService,
   ) {}
 
   async getAllUsers(): Promise<UserDTO[]> {
@@ -132,6 +134,36 @@ export class UserService {
       sponsorCode,
     });
     return { user, sponsorCode };
+  }
+
+  async forgotPassword(email: string) {
+    const caracToUse =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-+!*ù$';
+
+    const resetToken: string = Array(30)
+      .fill(caracToUse)
+      .map(function (x) {
+        return x[Math.floor(Math.random() * x.length)];
+      })
+      .join('');
+
+    const user = await this.userRepo.findOne({ where: { email: email } });
+    console.log({ user, email });
+    // Add resetCode to user
+    const updatedUser = await this.userRepo.update(user.id, {
+      resetToken,
+    });
+
+    // send email with url
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    // create user in db
+    // ...
+    // send confirmation mail
+    await this.mailService.sendUserConfirmation(
+      'thomas.clement.etude@gmail.com',
+      token,
+    );
+    return { updatedUser };
   }
 
   async changePassword(

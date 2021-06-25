@@ -114,7 +114,6 @@ export class UserController {
     @Res() res,
     @GetUser() user,
   ) {
-
     const change = await this.userService.changeSponsorCode(
       user.id,
       body.sponsorCode,
@@ -123,6 +122,15 @@ export class UserController {
     return res.status(HttpStatus.OK).json({
       message: 'Votre code de parrainage est prêt a être partagé',
       sponsorCode: change.sponsorCode,
+    });
+  }
+
+  @Post('forgot')
+  async forgotPassword(@Body() body: any, @Res() res) {
+    const change = await this.userService.forgotPassword(body.email);
+    if (!change) throw new NotFoundException("L'utilisateur n'existe plus");
+    return res.status(HttpStatus.OK).json({
+      message: 'Vous avez reçu un mail contenant un lien de réinitialisation',
     });
   }
 

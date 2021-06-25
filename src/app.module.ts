@@ -12,6 +12,7 @@ import { ArticleModule } from './article/article.module';
 import { MenuModule } from './menu/menu.module';
 import { OrderModule } from './order/order.module';
 import { CartModule } from './cart/cart.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CartModule } from './cart/cart.module';
     MenuModule,
     OrderModule,
     CartModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
