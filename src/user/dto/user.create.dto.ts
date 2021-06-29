@@ -15,9 +15,10 @@ export class CreateUserDTO {
   password: string;
   @ApiProperty()
   cityCode: number;
+  address: string;
   // refreshToken: string;
   // sponsorCode: string;
-  // profilePicture: string;
+  // picture: string;
   // createdAt: Date;
   // updatedAt: Date;
 }

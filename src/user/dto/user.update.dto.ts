@@ -19,7 +19,9 @@ export class UpdateUserDTO {
   @ApiProperty()
   sponsorCode: string;
   @ApiProperty()
-  profilePicture: string;
+  picture: string;
+  @ApiProperty()
+  address: string;
   // createdAt: Date;
   // updatedAt: Date;
 }

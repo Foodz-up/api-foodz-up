@@ -37,6 +37,9 @@ export class User {
   email: string;
 
   @ApiProperty()
+  @Column({ nullable: true })
+  address: string;
+
   @Column({ default: Role.User })
   role: Role;
 
@@ -62,7 +65,7 @@ export class User {
 
   @ApiProperty()
   @Column({ nullable: true })
-  profilePicture: string;
+  picture: string;
 
   @ApiProperty()
   @CreateDateColumn()
