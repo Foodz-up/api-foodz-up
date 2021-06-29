@@ -10,21 +10,27 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDTO } from './dto/create-restaurant.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { GetUser } from 'src/auth/guards/get-user.decorator';
 
 @Controller('restaurants')
 export class RestaurantController {
   constructor(private restaurantService: RestaurantService) {}
 
   // add a restaurant
-  @Post()
+  @UseGuards(JwtAuthGuard)
+  @Post('/me')
   async addRestaurant(
     @Res() res,
     @Body() createRestaurantDTO: CreateRestaurantDTO,
+    @GetUser() user,
   ) {
     const restaurant = await this.restaurantService.addRestaurant(
+      user.id,
       createRestaurantDTO,
     );
     return res.status(HttpStatus.OK).json({
@@ -41,14 +47,23 @@ export class RestaurantController {
   }
 
   // Fetch a particular restaurant using ID
-  @Get('/:id')
+  @Get('/dev/:id')
   async getRestaurant(@Res() res, @Param('id') id) {
     const restaurant = await this.restaurantService.getRestaurant(id);
     if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
     return res.status(HttpStatus.OK).json(restaurant);
   }
 
-  @Put('/:id')
+  // Fetch a particular restaurant using ID
+  @UseGuards(JwtAuthGuard)
+  @Get('/me')
+  async getRestaurantMe(@Res() res, @GetUser() user) {
+    const restaurant = await this.restaurantService.getRestaurantMe(user.id);
+    if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
+    return res.status(HttpStatus.OK).json(restaurant);
+  }
+
+  @Put('/dev/:id')
   async updateRestaurant(
     @Res() res,
     @Param('id') id,
@@ -65,8 +80,23 @@ export class RestaurantController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Put('/me')
+  async updateRestaurantMe(
+    @Res() res,
+    @GetUser() user,
+    @Body() createRestaurantDTO: CreateRestaurantDTO,
+  ) {
+    const restaurant = await this.restaurantService.updateRestaurantMe(
+      user.id,
+      createRestaurantDTO,
+    );
+    if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
+    return res.status(HttpStatus.OK).json(restaurant);
+  }
+
   // Delete a restaurant
-  @Delete('/:id')
+  @Delete('/dev/:id')
   async deleteRestaurant(@Res() res, @Param('id') restaurantID) {
     const restaurant = await this.restaurantService.deleteRestaurant(
       restaurantID,
@@ -76,5 +106,13 @@ export class RestaurantController {
       message: 'Restaurant has been deleted',
       restaurant,
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/me')
+  async deleteRestaurantMe(@Res() res, @GetUser() user) {
+    const restaurant = await this.restaurantService.deleteRestaurantMe(user.id);
+    if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
+    return res.status(HttpStatus.OK).json(restaurant);
   }
 }

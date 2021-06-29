@@ -1,15 +1,13 @@
 import * as mongoose from 'mongoose';
-
-enum ArticleType {
-  'VIANDE' = 'Viande',
-  'LEGUME' = 'Légumes',
-}
-
+import { ETypeArticle } from '../../interfaces'
 export const ArticleSchema = new mongoose.Schema({
-  id: Number,
+  type: {
+    type: String,
+    enum: ETypeArticle,
+  },
   name: String,
   description: String,
-  // TODO: update to enum
-  type: String,
   price: Number,
+  tag: String,
+  picture: String,
 });

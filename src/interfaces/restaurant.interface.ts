@@ -1,6 +1,22 @@
-import { ETypeRestaurant, ETypeRole, IMenu, IArticle } from '../../interfaces';
+import { Document } from 'mongoose';
+import { IArticle } from './article.interface';
+import { IMenu } from './menu.interface';
 
-export class CreateRestaurantDTO {
+export enum ETypeRestaurant {
+  FASTFOOD = 'Fastfood',
+  KEBAB = 'Kebab',
+}
+
+export enum ETypeRole {
+  RESTAURATOR = 'Restaurateur',
+  DRIVER = 'Livreur',
+  CLIENT = 'Client',
+  COMMERCIAL = 'Commercial',
+  TECHNIQUE = 'Technique',
+}
+
+export interface IRestaurant extends Document {
+  _id: object;
   name: string;
   type: ETypeRestaurant;
   menus?: Array<IMenu>;

@@ -43,19 +43,19 @@ export class OrderController {
     return res.status(HttpStatus.OK).json(order);
   }
 
-  @Put('/:id')
-  async updateOrder(
-    @Res() res,
-    @Param('id') id,
-    @Body() createOrderDTO: CreateOrderDTO,
-  ) {
-    const order = await this.orderService.updateOrder(id, createOrderDTO);
-    if (!order) throw new NotFoundException('Order does not exist!');
-    return res.status(HttpStatus.OK).json({
-      message: 'Order has been successfully updated',
-      order,
-    });
-  }
+  // @Put('/:id')
+  // async updateOrder(
+  //   @Res() res,
+  //   @Param('id') id,
+  //   @Body() createOrderDTO: CreateOrderDTO,
+  // ) {
+  //   const order = await this.orderService.updateOrder(id, createOrderDTO);
+  //   if (!order) throw new NotFoundException('Order does not exist!');
+  //   return res.status(HttpStatus.OK).json({
+  //     message: 'Order has been successfully updated',
+  //     order,
+  //   });
+  // }
 
   // Delete a order
   @Delete('/:id')

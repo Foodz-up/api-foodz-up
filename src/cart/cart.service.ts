@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ICart } from './interfaces/cart.interface';
+import { ICart } from '../interfaces';
 import { CreateCartDTO } from './dto/create-cart.dto';
 
 @Injectable()

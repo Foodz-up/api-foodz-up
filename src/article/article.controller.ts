@@ -10,7 +10,9 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ArticleService } from './article.service';
 import { CreateArticleDTO } from './dto/create-article.dto';
 
@@ -19,6 +21,7 @@ export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   // add an article
+  @UseGuards(JwtAuthGuard)
   @Post()
   async addArticle(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
     const article = await this.articleService.addArticle(CreateArticleDTO);

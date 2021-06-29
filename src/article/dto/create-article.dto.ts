@@ -1,9 +1,9 @@
-import { ArticleType } from '../interfaces/article.interface';
+import { ETypeArticle } from '../../interfaces';
 
 export class CreateArticleDTO {
-  id: number;
   name: string;
   description: string;
-  type: ArticleType;
+  type: ETypeArticle;
   price: number;
+  restaurantId: number;
 }

@@ -1,5 +1,4 @@
 export class CreateMenuDTO {
-  id: number;
   name: string;
   description: string;
   articles: [];

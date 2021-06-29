@@ -1,4 +1,4 @@
-import { OrderState } from '../interfaces/order.interface';
+import { EOrderState } from '../../interfaces';
 
 export class CreateOrderDTO {
   id: number;
@@ -8,6 +8,6 @@ export class CreateOrderDTO {
   restaurant: Array<any>;
   driver: Array<any>;
   delivery: Array<any>;
-  state: OrderState;
+  state: EOrderState;
   date: Date;
 }
