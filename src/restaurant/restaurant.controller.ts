@@ -12,8 +12,16 @@ import {
   Param,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
-import { CreateRestaurantDTO } from './dto/create-restaurant.dto';
+import { CreateRestaurantDTO } from './dto/restaurant.createRestaurant.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Restaurants')
 @Controller('restaurants')
 export class RestaurantController {
   constructor(private restaurantService: RestaurantService) {}

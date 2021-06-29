@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription(
       "Ce document reprend l'ensemble des routes existantes dans ce projet",
     )
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
 

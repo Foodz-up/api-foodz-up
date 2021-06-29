@@ -23,7 +23,15 @@ import { IsAdminGuard } from 'src/auth/guards/isAdmin.guard';
 import { SameUserIdGuard } from 'src/auth/guards/sameUserId.guard';
 import { ChangePasswordUserDTO } from './dto/user.changePassword';
 import { GetUser } from 'src/auth/guards/get-user.decorator';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -114,7 +122,6 @@ export class UserController {
     @Res() res,
     @GetUser() user,
   ) {
-
     const change = await this.userService.changeSponsorCode(
       user.id,
       body.sponsorCode,

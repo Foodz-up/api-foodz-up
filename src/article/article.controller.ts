@@ -12,8 +12,16 @@ import {
   Param,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { CreateArticleDTO } from './dto/create-article.dto';
+import { CreateArticleDTO } from './dto/article.createArticle.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Articles')
 @Controller('articles')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}

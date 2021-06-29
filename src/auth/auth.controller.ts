@@ -25,7 +25,15 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { GetUser } from './guards/get-user.decorator';
 import { UserService } from 'src/user/user.service';
 import { ChangePasswordUserDTO } from 'src/user/dto/user.changePassword';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(

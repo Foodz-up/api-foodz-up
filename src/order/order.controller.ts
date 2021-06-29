@@ -12,8 +12,16 @@ import {
   Param,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { CreateOrderDTO } from './dto/create-order.dto';
+import { CreateOrderDTO } from './dto/order.createOrder.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Orders')
 @Controller('orders')
 export class OrderController {
   constructor(private orderService: OrderService) {}
