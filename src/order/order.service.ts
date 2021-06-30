@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IOrder, IRestaurant, IUser } from '../interfaces';
 import { CreateOrderDTO } from './dto/create-order.dto';
@@ -33,13 +33,14 @@ export class OrderService {
   }
 
   async getOrderMeRestaurator(userId: number): Promise<Array<IOrder>> {
-    const restaurant = await this.restaurantModel.findOne({
+    const restaurantOwner = await this.restaurantModel.findOne({
       editor: userId,
     });
-    console.log({ restaurant });
+    console.log({ restaurantOwner });
+    const newId = restaurantOwner._id.toString();
 
     const orders = await this.orderModel.find({
-      'restaurant._id': restaurant._id,
+      'restaurant._id': newId,
     });
     console.log({ orders });
 
