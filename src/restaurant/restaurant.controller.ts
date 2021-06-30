@@ -34,7 +34,7 @@ export class RestaurantController {
       createRestaurantDTO,
     );
     return res.status(HttpStatus.OK).json({
-      message: 'Restaurant has been created successfully',
+      message: `Votre restaurant "${restaurant.name}" a était créé avec succès`,
       restaurant,
     });
   }
@@ -59,8 +59,11 @@ export class RestaurantController {
   @Get('/me')
   async getRestaurantMe(@Res() res, @GetUser() user) {
     const restaurant = await this.restaurantService.getRestaurantMe(user.id);
-    if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
-    return res.status(HttpStatus.OK).json(restaurant);
+    if (!restaurant)
+      throw new NotFoundException(
+        "Vous n'avez pas de restaurant. Vous pouvez en créer un pour commencer l'aventure",
+      );
+    return res.status(HttpStatus.OK).json({ restaurant });
   }
 
   @Put('/dev/:id')
@@ -92,7 +95,9 @@ export class RestaurantController {
       createRestaurantDTO,
     );
     if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
-    return res.status(HttpStatus.OK).json(restaurant);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Votre restaurant a été mis à jour', restaurant });
   }
 
   // Delete a restaurant
@@ -112,7 +117,10 @@ export class RestaurantController {
   @Delete('/me')
   async deleteRestaurantMe(@Res() res, @GetUser() user) {
     const restaurant = await this.restaurantService.deleteRestaurantMe(user.id);
-    if (!restaurant) throw new NotFoundException('Restaurant does not exist!');
-    return res.status(HttpStatus.OK).json(restaurant);
+    if (!restaurant)
+      throw new NotFoundException("Attention : Vous n'avez pas de restaurant");
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Votre restaurant a été supprimé', restaurant });
   }
 }

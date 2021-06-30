@@ -7,7 +7,7 @@ export enum ETypeArticle {
 }
 
 export interface IArticle extends Document {
-  _id: number;
+  id: number;
   type: ETypeArticle;
   name: string;
   description?: string;
