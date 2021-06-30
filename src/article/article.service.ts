@@ -82,7 +82,6 @@ export class ArticleService {
     const updatedArticle = updatedRestaurant.articles.find(
       (article) => article.id === createArticleDTO.id,
     );
-    console.log({ createArticleDTO, d: updatedArticle });
     return updatedArticle;
   }
 }

@@ -1,13 +1,19 @@
-import { EOrderState } from '../../interfaces';
+import {
+  EOrderState,
+  IArticle,
+  IMenu,
+  IRestaurant,
+  IUser,
+} from '../../interfaces';
 
 export class CreateOrderDTO {
   id: number;
-  orderNumber: number;
   price: number;
-  articles: [];
-  restaurant: Array<any>;
-  driver: Array<any>;
-  delivery: Array<any>;
-  state: EOrderState;
-  date: Date;
+  items: Array<IArticle | IMenu>;
+  status: EOrderState;
+  driver: IUser | null;
+  restaurant: IRestaurant;
+  client: IUser;
+  // TODO: change to date
+  date: number;
 }

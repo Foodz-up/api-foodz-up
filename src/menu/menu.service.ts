@@ -38,7 +38,6 @@ export class MenuService {
       { $push: { menus: createMenuDTO } },
       { new: true, useFindAndModify: true },
     );
-    console.log({ userId, createMenuDTO, newMenu });
     return newMenu;
   }
   // Edit customer details

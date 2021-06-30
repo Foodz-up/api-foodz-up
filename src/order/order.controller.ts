@@ -10,9 +10,12 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDTO } from './dto/create-order.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { GetUser } from 'src/auth/guards/get-user.decorator';
 
 @Controller('orders')
 export class OrderController {
@@ -33,6 +36,34 @@ export class OrderController {
   async getAllOrder(@Res() res) {
     const orders = await this.orderService.getAllOrder();
     return res.status(HttpStatus.OK).json(orders);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/me')
+  async getOrderMe(@Res() res, @GetUser() user) {
+    const orders = await this.orderService.getOrderMe(user.id);
+    if (!orders)
+      throw new NotFoundException(
+        "Vous n'avez pas encore réalisé de commandes",
+      );
+    return res.status(HttpStatus.OK).json({
+      message: 'Vos commandes on été récupérées',
+      orders,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/me')
+  async addOrderMe(
+    @Res() res,
+    @Body() createOrderDTO: CreateOrderDTO,
+    @GetUser() user,
+  ) {
+    const order = await this.orderService.addOrderMe(user, createOrderDTO);
+    return res.status(HttpStatus.OK).json({
+      message: 'Order has been created successfully',
+      order,
+    });
   }
 
   // Fetch a particular order using ID
