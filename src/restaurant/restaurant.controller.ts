@@ -43,7 +43,11 @@ export class RestaurantController {
   @Get()
   async getAllRestaurant(@Res() res) {
     const restaurants = await this.restaurantService.getAllRestaurant();
-    return res.status(HttpStatus.OK).json(restaurants);
+    return res.status(HttpStatus.OK).json({
+      message:
+        "Vous avez récupéré l'ensemble des restaurant présent sur le site",
+      restaurants,
+    });
   }
 
   // Fetch a particular restaurant using ID
