@@ -53,6 +53,18 @@ export class OrderController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/me/restaurator')
+  async getOrderMeRestaurator(@Res() res, @GetUser() user) {
+    const orders = await this.orderService.getOrderMeRestaurator(user.id);
+    if (!orders)
+      throw new NotFoundException("Vous n'avez pas encore de commandes");
+    return res.status(HttpStatus.OK).json({
+      message: 'Vos commandes on été récupérées',
+      orders,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('/me')
   async addOrderMe(
     @Res() res,

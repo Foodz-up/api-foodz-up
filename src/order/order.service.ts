@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { IOrder, IUser } from '../interfaces';
+import { IOrder, IRestaurant, IUser } from '../interfaces';
 import { CreateOrderDTO } from './dto/create-order.dto';
 
 @Injectable()
@@ -9,6 +9,8 @@ export class OrderService {
   constructor(
     @InjectModel('Order')
     private readonly orderModel: Model<IOrder>,
+    @InjectModel('Restaurant')
+    private readonly restaurantModel: Model<IRestaurant>,
   ) {}
   // fetch all order
   async getAllOrder(): Promise<IOrder[]> {
@@ -22,12 +24,26 @@ export class OrderService {
   }
 
   async getOrderMe(clientId: number): Promise<Array<IOrder>> {
-    const customer = await this.orderModel.find({
+    const orders = await this.orderModel.find({
       'client.id': clientId,
     });
-    console.log({ customer });
+    console.log({ orders });
 
-    return customer;
+    return orders;
+  }
+
+  async getOrderMeRestaurator(userId: number): Promise<Array<IOrder>> {
+    const restaurant = await this.restaurantModel.findOne({
+      editor: userId,
+    });
+    console.log({ restaurant });
+
+    const orders = await this.orderModel.find({
+      'restaurant._id': restaurant._id,
+    });
+    console.log({ orders });
+
+    return orders;
   }
   // post a single customer
   async addOrder(createOrderDTO: CreateOrderDTO): Promise<IOrder> {
