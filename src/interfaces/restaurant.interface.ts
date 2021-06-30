@@ -16,7 +16,6 @@ export enum ETypeRole {
 }
 
 export interface IRestaurant extends Document {
-  _id: object;
   name: string;
   type: ETypeRestaurant;
   menus?: Array<IMenu>;

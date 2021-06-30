@@ -10,9 +10,13 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDTO } from './dto/create-menu.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { GetUser } from 'src/auth/guards/get-user.decorator';
 
 @Controller('menus')
 export class MenuController {
@@ -24,6 +28,20 @@ export class MenuController {
     const menu = await this.menuService.addMenu(createMenuDTO);
     return res.status(HttpStatus.OK).json({
       message: 'Menu has been created successfully',
+      menu,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/me')
+  async addMenuMe(
+    @Res() res,
+    @Body() createMenuDTO: CreateMenuDTO,
+    @GetUser() user,
+  ) {
+    const menu = await this.menuService.addMenuMe(user.id, createMenuDTO);
+    return res.status(HttpStatus.OK).json({
+      message: 'Le menu a bien été ajouté au restaurant',
       menu,
     });
   }
@@ -53,6 +71,32 @@ export class MenuController {
     if (!menu) throw new NotFoundException('Menu does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'Menu has been successfully updated',
+      menu,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/update')
+  async updateMenuMe(
+    @Res() res,
+    @Body() createMenuDTO: CreateMenuDTO,
+    @GetUser() user,
+  ) {
+    const menu = await this.menuService.updateMenuMe(user.id, createMenuDTO);
+    if (!menu) throw new NotFoundException('Menu does not exist!');
+    return res.status(HttpStatus.OK).json({
+      message: 'Menu has been successfully updated',
+      menu,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/delete')
+  async deleteMenuMe(@Res() res, @Body('menuId') menuId, @GetUser() user) {
+    const menu = await this.menuService.deleteMenuMe(user.id, menuId);
+    if (!menu) throw new NotFoundException('Menu does not exist');
+    return res.status(HttpStatus.OK).json({
+      message: 'Menu has been deleted',
       menu,
     });
   }

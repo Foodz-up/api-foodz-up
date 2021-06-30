@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 import { IArticle } from '../interfaces';
 
 export interface IMenu extends Document {
-  _id: number;
+  id: number;
   name: string;
   description?: string;
   articles: Array<IArticle>;
