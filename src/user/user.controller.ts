@@ -39,6 +39,7 @@ export class UserController {
   //add a user
   @UseGuards(JwtAuthGuard, IsAdminGuard)
   @Post()
+  @ApiOperation({ summary: 'Commercial can create an user' })
   async addUser(@Res() res, @Body() CreateUserDTO: CreateUserDTO) {
     const user = await this.userService.addUser(CreateUserDTO);
     return res.status(HttpStatus.OK).json({
@@ -50,6 +51,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, IsAdminGuard)
   // Retrieve users list
   @Get()
+  @ApiOperation({ summary: 'Commercial can get all of his users' })
   async getAllUser(@Res() res) {
     const users = await this.userService.getAllUsers();
     return res.status(HttpStatus.OK).json(users);
@@ -58,6 +60,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, SameUserIdGuard)
   // Fetch a particular user using ID
   @Get('/dev/:id')
+  @ApiOperation({ summary: 'Commercial can get a specific users' })
   async getUser(@Res() res, @Param('id') id) {
     const user = await this.userService.getUser(id);
     if (!user) throw new NotFoundException('User does not exist!');
@@ -66,6 +69,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard, SameUserIdGuard)
   @Put('/dev/:id')
+  @ApiOperation({ summary: 'Commercial can update a user' })
   async updateUser(
     @Res() res,
     @Param('id') id,
@@ -81,6 +85,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Put()
+  @ApiOperation({ summary: 'Commercial can delete one of his user' })
   async updateUserFromApp(
     @Res() res,
     @GetUser() user,
@@ -100,6 +105,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('password')
+  @ApiOperation({ summary: 'User can change password' })
   async changePasswordFromApp(
     @Body() changePasswordUserDTO: ChangePasswordUserDTO,
     @Res() res,
@@ -117,6 +123,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('sponsor')
+  @ApiOperation({ summary: 'User can get a sponsor code' })
   async changeSponsorCodeFromApp(
     @Body() body: any,
     @Res() res,
@@ -136,6 +143,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, SameUserIdGuard)
   // Delete a user
   @Delete('/dev/:id')
+  @ApiOperation({ summary: 'Commercial can delete one of his user' })
   async deleteUser(@Res() res, @Param('id') userID) {
     const user = await this.userService.deleteUser(userID);
 
@@ -148,6 +156,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   // Delete a user
   @Delete()
+  @ApiOperation({ summary: 'user can delete his account' })
   async deleteUserFromApp(@Res() res, @GetUser() user) {
     await this.userService.deleteUser(user.id);
     return res.status(HttpStatus.OK).json({

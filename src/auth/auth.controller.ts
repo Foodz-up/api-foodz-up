@@ -42,6 +42,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @ApiOperation({ summary: 'User can create an account' })
   public async register(
     @Body() createUserDTO: CreateUserDTO,
   ): Promise<RegistrationStatus> {
@@ -57,6 +58,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'User can log in is account' })
   public async login(
     @Body() loginUserDTO: LoginUserDTO,
     @Res() res,
@@ -69,6 +71,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard, AuthenticatedGuard)
   @Post('refreshtoken')
+  @ApiOperation({ summary: 'User get a new user session' })
   async refreshToken(@Body() body: RefreshToken): Promise<LoginStatus> {
     const { refreshToken, payload } = body;
     const user = await this.authService.validateUser(payload);
@@ -87,14 +90,8 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('test')
-  @UseGuards(AuthGuard())
-  public async testAuth(@Req() req: any): Promise<JwtPayload> {
-    return req.user;
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get('me')
+  @ApiOperation({ summary: 'User can get is profile' })
   async getProfile(@GetUser() user, @Request() req, @Res() res) {
     const getUser = await this.userService.getUser(req.user.id);
     if (!getUser) throw new NotFoundException('User does not exist!');
