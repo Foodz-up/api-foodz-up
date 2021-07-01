@@ -63,7 +63,6 @@ export class MenuService {
     const updatedMenu = updatedRestaurant.menus.find(
       (menus) => menus.id === createMenuDTO.id,
     );
-    console.log({ createMenuDTO, d: updatedMenu });
     return updatedMenu;
   }
 

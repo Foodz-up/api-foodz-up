@@ -16,4 +16,5 @@ export class CreateOrderDTO {
   client: IUser;
   // TODO: change to date
   date: number;
+  distance: number;
 }

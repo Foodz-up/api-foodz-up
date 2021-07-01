@@ -27,7 +27,6 @@ export class OrderService {
     const orders = await this.orderModel.find({
       'client.id': clientId,
     });
-    console.log({ orders });
 
     return orders;
   }
@@ -36,15 +35,73 @@ export class OrderService {
     const restaurantOwner = await this.restaurantModel.findOne({
       editor: userId,
     });
-    console.log({ restaurantOwner });
     const newId = restaurantOwner._id.toString();
 
     const orders = await this.orderModel.find({
       'restaurant._id': newId,
     });
-    console.log({ orders });
 
     return orders;
+  }
+
+  async getOrderMeDriver(userId: number): Promise<Array<IOrder>> {
+    const orders = await this.orderModel.find({
+      'driver.id': userId,
+    });
+
+    return orders;
+  }
+
+  async getOrderDeliver(): Promise<Array<IOrder>> {
+    const orders = await this.orderModel.find({
+      driver: null,
+    });
+
+    return orders;
+  }
+
+  async updateOrderClient(
+    userId: number,
+    body: { orderId: object; status: string; driver: IUser },
+  ): Promise<IOrder> {
+    // const newId = restaurantOwner._id.toString();
+
+    const toUpdate = { status: body.status, driver: body.driver };
+    if (body.driver === null) {
+      delete toUpdate.driver;
+    }
+
+    const updateOrder = await this.orderModel.updateOne(
+      { _id: body.orderId.toString() },
+      toUpdate,
+      { new: true, useFindAndModify: true },
+    );
+
+    const updatedOrder = await this.orderModel.findOne({
+      _id: body.orderId.toString(),
+    });
+
+    return updatedOrder;
+  }
+
+  async updateOrderClientfromDriver(body: {
+    orderId: string;
+    status: string;
+    driver: IUser;
+  }): Promise<IOrder> {
+    const toUpdate = { status: body.status, driver: body.driver };
+
+    const updatOrder = await this.orderModel.updateOne(
+      { _id: body.orderId },
+      toUpdate,
+      { new: true, useFindAndModify: true },
+    );
+
+    const updatedOrder = await this.orderModel.findOne({
+      _id: body.orderId,
+    });
+
+    return updatedOrder;
   }
   // post a single customer
   async addOrder(createOrderDTO: CreateOrderDTO): Promise<IOrder> {

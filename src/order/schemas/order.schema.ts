@@ -11,4 +11,5 @@ export const OrderSchema = new mongoose.Schema({
   client: {},
   // TODO: change to date
   date: Number,
+  distance: Number,
 });

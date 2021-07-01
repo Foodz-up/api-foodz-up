@@ -13,10 +13,11 @@ export interface IOrder {
   id: number;
   price: number;
   items: Array<IArticle | IMenu>;
-  status: EOrderState;
+  status: EOrderState | string;
   driver: IUser | null;
   restaurant: IRestaurant;
   client: IUser;
   // TODO: change to date
   date: number;
+  distance: number;
 }

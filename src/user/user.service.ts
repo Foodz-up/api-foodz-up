@@ -139,7 +139,6 @@ export class UserService {
     changePasswordUserDTO: ChangePasswordUserDTO,
   ): Promise<any> {
     const { oldPassword, newPassword, confirmPassword } = changePasswordUserDTO;
-    console.log({ oldPassword, newPassword, confirmPassword });
 
     if (newPassword === '' || oldPassword === newPassword) {
       throw new HttpException(

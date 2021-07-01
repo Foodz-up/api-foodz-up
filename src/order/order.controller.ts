@@ -11,6 +11,7 @@ import {
   Delete,
   Param,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDTO } from './dto/create-order.dto';
@@ -61,6 +62,54 @@ export class OrderController {
     return res.status(HttpStatus.OK).json({
       message: 'Vos commandes on été récupérées',
       orders,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/me/driver')
+  async getOrderMeDriver(@Res() res, @GetUser() user) {
+    const orders = await this.orderService.getOrderMeDriver(user.id);
+    if (!orders)
+      throw new NotFoundException("Vous n'avez pas encore de commandes");
+    return res.status(HttpStatus.OK).json({
+      message: 'Vos commandes on été récupérées',
+      orders,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/driver')
+  async getOrderDeliver(@Res() res, @GetUser() user) {
+    const orders = await this.orderService.getOrderDeliver();
+    if (!orders)
+      throw new NotFoundException("Il n'y a pas de commandes pour le moment");
+    return res.status(HttpStatus.OK).json({
+      message: 'Les commandes disponibles ont étaient récupéré',
+      orders,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/update')
+  async updateOrderClient(@Res() res, @GetUser() user, @Body() body) {
+    const order = await this.orderService.updateOrderClient(user.id, body);
+    if (!order)
+      throw new NotFoundException('La mise à jours de la commande a échouée');
+    return res.status(HttpStatus.OK).json({
+      message: `La commande est passé au status : "${order.status}"`,
+      order,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/update')
+  async updateOrderClientfromDriver(@Res() res, @Body() body) {
+    const order = await this.orderService.updateOrderClientfromDriver(body);
+    if (!order)
+      throw new NotFoundException('La mise à jours de la commande a échouée');
+    return res.status(HttpStatus.OK).json({
+      message: `La commande est passé au status : "${order.status}"`,
+      order,
     });
   }
 
