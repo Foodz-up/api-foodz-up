@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RefreshTokenDTO {
+export class CreateCartDTO {
   @ApiProperty()
   id: number;
   @ApiProperty()
-  refreshToken: string;
+  articles: [];
   @ApiProperty()
-  refreshTokenExpires: string;
+  price: number;
 }

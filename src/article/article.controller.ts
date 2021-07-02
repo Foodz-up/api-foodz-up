@@ -12,14 +12,23 @@ import {
   Param,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { CreateArticleDTO } from './dto/create-article.dto';
+import { CreateArticleDTO } from './dto/article.createArticle.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Articles')
 @Controller('articles')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   // add an article
   @Post()
+  @ApiOperation({ summary: 'Restaurator can add an article' })
   async addArticle(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
     const article = await this.articleService.addArticle(CreateArticleDTO);
     return res.status(HttpStatus.OK).json({
@@ -30,6 +39,7 @@ export class ArticleController {
 
   // Retrieve articles list
   @Get()
+  @ApiOperation({ summary: 'Restaurator can get all of his articles' })
   async getAllArticle(@Res() res) {
     const articles = await this.articleService.getAllArticle();
     return res.status(HttpStatus.OK).json(articles);
@@ -37,6 +47,7 @@ export class ArticleController {
 
   // Fetch a particular article using ID
   @Get('/:id')
+  @ApiOperation({ summary: 'Restaurator can get a specific article' })
   async getArticle(@Res() res, @Param('id') id) {
     const article = await this.articleService.getArticle(id);
     if (!article) throw new NotFoundException('Article does not exist!');
@@ -44,6 +55,7 @@ export class ArticleController {
   }
 
   @Put('/:id')
+  @ApiOperation({ summary: 'Restaurator can update an article' })
   async updateArticle(
     @Res() res,
     @Param('id') id,
@@ -62,6 +74,7 @@ export class ArticleController {
 
   // Delete a article
   @Delete('/:id')
+  @ApiOperation({ summary: 'Restaurator can delete one of his article' })
   async deleteArticle(@Res() res, @Query('articleID') articleID) {
     const article = await this.articleService.deleteArticle(articleID);
     if (!article) throw new NotFoundException('article does not exist');
