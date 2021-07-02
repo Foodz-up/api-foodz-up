@@ -16,7 +16,7 @@ import {
 import { GetUser } from 'src/auth/guards/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ArticleService } from './article.service';
-import { CreateArticleDTO } from './dto/article.createArticle.dto';
+import { CreateArticleDTO } from './dto/article.create-article.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
