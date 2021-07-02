@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IRestaurant } from '../interfaces';
-import { CreateRestaurantDTO } from './dto/create-restaurant.dto';
+import { CreateRestaurantDTO } from './dto/restaurant.createRestaurant.dto';
 
 @Injectable()
 export class RestaurantService {

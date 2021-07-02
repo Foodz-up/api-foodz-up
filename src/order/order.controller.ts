@@ -14,16 +14,25 @@ import {
   Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { CreateOrderDTO } from './dto/create-order.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { GetUser } from 'src/auth/guards/get-user.decorator';
+import { CreateOrderDTO } from './dto/order.createOrder.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Orders')
 @Controller('orders')
 export class OrderController {
   constructor(private orderService: OrderService) {}
 
   // add a order
   @Post()
+  @ApiOperation({ summary: 'Client can add an order' })
   async addOrder(@Res() res, @Body() createOrderDTO: CreateOrderDTO) {
     const order = await this.orderService.addOrder(createOrderDTO);
     return res.status(HttpStatus.OK).json({
@@ -34,6 +43,7 @@ export class OrderController {
 
   // Retrieve orders list
   @Get()
+  @ApiOperation({ summary: 'Client can get all of his order' })
   async getAllOrder(@Res() res) {
     const orders = await this.orderService.getAllOrder();
     return res.status(HttpStatus.OK).json(orders);
@@ -151,6 +161,7 @@ export class OrderController {
 
   // Delete a order
   @Delete('/:id')
+  @ApiOperation({ summary: 'Client can delete one of his order' })
   async deleteOrder(@Res() res, @Query('orderID') orderID) {
     const order = await this.orderService.deleteOrder(orderID);
     if (!order) throw new NotFoundException('Order does not exist');

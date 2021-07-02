@@ -14,16 +14,25 @@ import {
   Patch,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
-import { CreateMenuDTO } from './dto/create-menu.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { GetUser } from 'src/auth/guards/get-user.decorator';
+import { CreateMenuDTO } from './dto/menu.createMenu.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Menus')
 @Controller('menus')
 export class MenuController {
   constructor(private menuService: MenuService) {}
 
   // add a menu
   @Post()
+  @ApiOperation({ summary: 'Restaurator can add a menu' })
   async addMenu(@Res() res, @Body() createMenuDTO: CreateMenuDTO) {
     const menu = await this.menuService.addMenu(createMenuDTO);
     return res.status(HttpStatus.OK).json({
@@ -48,6 +57,7 @@ export class MenuController {
 
   // Retrieve menu list
   @Get()
+  @ApiOperation({ summary: 'Restaurator can get all of his menus' })
   async getAllMenu(@Res() res) {
     const menu = await this.menuService.getAllMenu();
     return res.status(HttpStatus.OK).json(menu);
@@ -55,6 +65,7 @@ export class MenuController {
 
   // Fetch a particular menu using ID
   @Get('/:id')
+  @ApiOperation({ summary: 'Restaurator can get a specific menu' })
   async getMenu(@Res() res, @Param('id') id) {
     const menu = await this.menuService.getMenu(id);
     if (!menu) throw new NotFoundException('Menu does not exist!');
@@ -62,6 +73,7 @@ export class MenuController {
   }
 
   @Put('/:id')
+  @ApiOperation({ summary: 'Restaurator can update a menu' })
   async updateMenu(
     @Res() res,
     @Param('id') id,
@@ -103,6 +115,7 @@ export class MenuController {
 
   // Delete a menu
   @Delete('/:id')
+  @ApiOperation({ summary: 'Restaurator can delete one of his menu' })
   async deleteMenu(@Res() res, @Query('menuID') menuID) {
     const menu = await this.menuService.deleteMenu(menuID);
     if (!menu) throw new NotFoundException('Menu does not exist');

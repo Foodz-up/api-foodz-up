@@ -12,8 +12,16 @@ import {
   Param,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDTO } from './dto/create-cart.dto';
+import { CreateCartDTO } from './dto/cart.createCart.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Carts')
 @Controller('carts')
 export class CartController {
   constructor(private cartService: CartService) {}
