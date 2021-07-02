@@ -1,16 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ETypeRestaurant, ETypeRole, IMenu, IArticle } from '../../interfaces';
+import { Document } from 'mongoose';
+import { IArticle } from './article.interface';
+import { IMenu } from './menu.interface';
 
-export class CreateRestaurantDTO {
-  @ApiProperty()
+export enum ETypeRestaurant {
+  FASTFOOD = 'Fastfood',
+  KEBAB = 'Kebab',
+}
+
+export enum ETypeRole {
+  RESTAURATOR = 'Restaurateur',
+  DRIVER = 'Livreur',
+  CLIENT = 'Client',
+  COMMERCIAL = 'Commercial',
+  TECHNIQUE = 'Technique',
+}
+
+export interface IRestaurant extends Document {
   name: string;
-  @ApiProperty()
   type: ETypeRestaurant;
-  @ApiProperty()
   menus?: Array<IMenu>;
-  @ApiProperty()
   articles?: Array<IArticle>;
-  @ApiProperty()
   timetable?: {
     lundi: { mStart: string; mEnd: string; aStart: string; aEnd: string };
     mardi: { mStart: string; mEnd: string; aStart: string; aEnd: string };
@@ -20,14 +29,9 @@ export class CreateRestaurantDTO {
     samedi: { mStart: string; mEnd: string; aStart: string; aEnd: string };
     dimanche: { mStart: string; mEnd: string; aStart: string; aEnd: string };
   };
-  @ApiProperty()
   picture?: string;
-  @ApiProperty()
   address?: string;
-  @ApiProperty()
   editor?: number;
-  @ApiProperty()
   waiting?: number;
-  @ApiProperty()
   note?: number;
 }

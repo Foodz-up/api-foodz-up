@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { IRestaurant } from './interfaces/restaurant.interface';
+import { IRestaurant } from '../interfaces';
 import { CreateRestaurantDTO } from './dto/restaurant.createRestaurant.dto';
 
 @Injectable()
@@ -20,10 +20,13 @@ export class RestaurantService {
     const customer = await this.restaurantModel.findOne({ id: customerID });
     return customer;
   }
+
   // post a single customer
   async addRestaurant(
+    userId: number,
     createRestaurantDTO: CreateRestaurantDTO,
   ): Promise<IRestaurant> {
+    createRestaurantDTO.editor = userId;
     const newRestaurant = await new this.restaurantModel(createRestaurantDTO);
     return newRestaurant.save();
   }
@@ -44,6 +47,33 @@ export class RestaurantService {
     const deletedRestaurant = await this.restaurantModel.findOneAndDelete({
       id: customerID,
     });
+    return deletedRestaurant;
+  }
+
+  async getRestaurantMe(editorId: number): Promise<IRestaurant> {
+    const customer = await this.restaurantModel.findOne({ editor: editorId });
+    return customer;
+  }
+
+  async updateRestaurantMe(
+    customerID,
+    createRestaurantDTO: CreateRestaurantDTO,
+  ): Promise<IRestaurant> {
+    const updatedRestaurant = await this.restaurantModel.findOneAndUpdate(
+      { editor: customerID },
+      createRestaurantDTO,
+      { new: true, useFindAndModify: true },
+    );
+    return updatedRestaurant;
+  }
+
+  async deleteRestaurantMe(customerID): Promise<any> {
+    const deletedRestaurant = await this.restaurantModel.findOneAndDelete(
+      {
+        editor: customerID,
+      },
+      { useFindAndModify: true },
+    );
     return deletedRestaurant;
   }
 }

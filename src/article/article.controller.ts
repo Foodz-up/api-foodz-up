@@ -10,9 +10,13 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UseGuards,
+  Patch,
 } from '@nestjs/common';
+import { GetUser } from 'src/auth/guards/get-user.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ArticleService } from './article.service';
-import { CreateArticleDTO } from './dto/article.createArticle.dto';
+import { CreateArticleDTO } from './dto/article.create-article.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -27,12 +31,19 @@ export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   // add an article
-  @Post()
-  @ApiOperation({ summary: 'Restaurator can add an article' })
-  async addArticle(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
-    const article = await this.articleService.addArticle(CreateArticleDTO);
+  @UseGuards(JwtAuthGuard)
+  @Post('/me')
+  async addArticle(
+    @Res() res,
+    @Body() CreateArticleDTO: CreateArticleDTO,
+    @GetUser() user,
+  ) {
+    const article = await this.articleService.addArticleMe(
+      CreateArticleDTO,
+      user.id,
+    );
     return res.status(HttpStatus.OK).json({
-      message: 'Article has been created successfully',
+      message: "L'article a bien été ajouté au restaurant",
       article,
     });
   }
@@ -72,14 +83,50 @@ export class ArticleController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/update')
+  async updateArticleMe(
+    @Res() res,
+    @GetUser() user,
+    @Body() createArticleDTO: CreateArticleDTO,
+  ) {
+    const article = await this.articleService.updateArticleMe(
+      user.id,
+      createArticleDTO,
+    );
+    if (!article)
+      throw new NotFoundException("Nous n'avons pas trouvé l'article en base");
+    return res.status(HttpStatus.OK).json({
+      message: 'Votre article a été mis à jour',
+      article,
+    });
+  }
+
   // Delete a article
-  @Delete('/:id')
-  @ApiOperation({ summary: 'Restaurator can delete one of his article' })
+  @Delete('/dev/:id')
   async deleteArticle(@Res() res, @Query('articleID') articleID) {
     const article = await this.articleService.deleteArticle(articleID);
     if (!article) throw new NotFoundException('article does not exist');
     return res.status(HttpStatus.OK).json({
       message: 'Article has been deleted',
+      article,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/delete')
+  async deleteArticleMe(
+    @Res() res,
+    @Body('articleId') articleId,
+    @GetUser() user,
+  ) {
+    const article = await this.articleService.deleteArticleMe(
+      user.id,
+      articleId,
+    );
+    if (!article) throw new NotFoundException('article does not exist');
+    return res.status(HttpStatus.OK).json({
+      message: "L'article a bien été supprimé",
       article,
     });
   }

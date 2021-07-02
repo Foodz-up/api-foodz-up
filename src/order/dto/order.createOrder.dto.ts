@@ -1,23 +1,35 @@
+import {
+  EOrderState,
+  IArticle,
+  IMenu,
+  IRestaurant,
+  IUser,
+} from '../../interfaces';
 import { ApiProperty } from '@nestjs/swagger';
-import { OrderState } from '../interfaces/order.interface';
 
 export class CreateOrderDTO {
   @ApiProperty()
   id: number;
   @ApiProperty()
-  orderNumber: number;
-  @ApiProperty()
   price: number;
   @ApiProperty()
-  articles: [];
+  items: Array<IArticle | IMenu>;
   @ApiProperty()
-  restaurant: Array<any>;
+  status: EOrderState;
+
   @ApiProperty()
-  driver: Array<any>;
+  driver: IUser | null;
+
   @ApiProperty()
-  delivery: Array<any>;
+  restaurant: IRestaurant;
+
   @ApiProperty()
-  state: OrderState;
+  client: IUser;
+  // TODO: change to date
+
   @ApiProperty()
-  date: Date;
+  date: number;
+
+  @ApiProperty()
+  distance: number;
 }

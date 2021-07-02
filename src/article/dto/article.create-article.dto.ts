@@ -1,5 +1,5 @@
+import { ETypeArticle } from '../../interfaces';
 import { ApiProperty } from '@nestjs/swagger';
-import { ArticleType } from '../interfaces/article.interface';
 
 export class CreateArticleDTO {
   @ApiProperty()
@@ -9,7 +9,9 @@ export class CreateArticleDTO {
   @ApiProperty()
   description: string;
   @ApiProperty()
-  type: ArticleType;
+  type: ETypeArticle;
   @ApiProperty()
   price: number;
+  @ApiProperty()
+  restaurantId: number;
 }

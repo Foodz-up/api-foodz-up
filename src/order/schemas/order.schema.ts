@@ -1,18 +1,15 @@
 import * as mongoose from 'mongoose';
-
-enum OrderState {
-  'VALIDE' = 'Validé',
-  'ENCOURS' = 'En cours',
-}
+import { EOrderState } from '../../interfaces';
 
 export const OrderSchema = new mongoose.Schema({
   id: Number,
-  orderNumber: Number,
   price: Number,
-  articles: [],
-  restaurant: Object,
-  driver: Object,
-  delivery: Object,
-  state: String,
-  date: Date,
+  items: [],
+  status: String,
+  driver: {},
+  restaurant: {},
+  client: {},
+  // TODO: change to date
+  date: Number,
+  distance: Number,
 });

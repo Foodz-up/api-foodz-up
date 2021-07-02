@@ -13,14 +13,14 @@ import {
   Put,
 } from '@nestjs/common';
 import { CreateUserDTO } from '../user/dto/user.create.dto';
-import { RegistrationStatus } from './interfaces/registration-status.interface';
+import { RegistrationStatus } from '../interfaces';
 import { AuthService } from './auth.service';
-import { LoginStatus } from './interfaces/login-status.interface';
+import { LoginStatus } from '../interfaces';
 import { LoginUserDTO } from '../user/dto/user.login.dto';
-import { JwtPayload } from './interfaces/payload.interface';
+import { JwtPayload } from '../interfaces';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
-import { RefreshToken } from './interfaces/refresh-token.interface';
+import { RefreshToken } from '../interfaces';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { GetUser } from './guards/get-user.decorator';
 import { UserService } from 'src/user/user.service';
@@ -39,7 +39,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private userService: UserService,
-  ) {}
+  ) { }
 
   @Post('register')
   @ApiOperation({ summary: 'User can create an account' })

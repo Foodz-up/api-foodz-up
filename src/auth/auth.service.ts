@@ -1,11 +1,11 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDTO } from '../user/dto/user.create.dto';
-import { RegistrationStatus } from './interfaces/registration-status.interface';
+import { RegistrationStatus } from '../interfaces';
 import { UserService } from '../user/user.service';
-import { LoginStatus } from './interfaces/login-status.interface';
+import { LoginStatus } from '../interfaces';
 import { LoginUserDTO } from '../user/dto/user.login.dto';
 import { UserDTO } from '../user/dto/user.dto';
-import { JwtPayload } from './interfaces/payload.interface';
+import { JwtPayload } from '../interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { toUserDTO } from 'src/helpers/mapper';
 const randtoken = require('rand-token');
