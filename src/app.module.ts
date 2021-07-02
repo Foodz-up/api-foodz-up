@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Transport, ClientsModule } from '@nestjs/microservices';
 import { Connection } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,6 +26,13 @@ import { CartModule } from './cart/cart.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    ClientsModule.register([
+      {
+        name: 'AUTH',
+        transport: Transport.TCP,
+        options: { host: 'localhost', port: 8877 },
+      },
+    ]),
     UserModule,
     AuthModule,
     ConfigModule.forRoot({

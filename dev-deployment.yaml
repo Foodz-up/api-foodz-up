@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f api-compose.yml
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api-dev
+  name: api-dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: api-dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f api-compose.yml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/nesjs-network: "true"
+        io.kompose.service: api-dev
+    spec:
+      containers:
+        - args:
+            - npm
+            - run
+            - start:debug
+          image: gxxtech/api-foodzup:latest
+          name: api-dev
+          ports:
+            - containerPort: 8000
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/node/app
+              name: api-dev-claim0
+            - mountPath: /home/node/app/node_modules
+              name: api-dev-claim1
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+      volumes:
+        - name: api-dev-claim0
+          persistentVolumeClaim:
+            claimName: api-dev-claim0
+        - name: api-dev-claim1
+          persistentVolumeClaim:
+            claimName: api-dev-claim1
+status: {}

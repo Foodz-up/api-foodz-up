@@ -1,7 +1,7 @@
 {
     "type": "mysql",
-    "host": "172.22.0.100",
-    "port": 3306,
+    "host": "localhost",
+    "port": 3366,
     "username": "foodzup",
     "password": "foodzup",
     "database": "foodzup",
